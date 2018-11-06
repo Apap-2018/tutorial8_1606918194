@@ -11,7 +11,9 @@
 <body>
     <nav th:replace="fragments/fragment :: navbar"></nav>
 
+	<br>
     <h2>Hello!</h2>
+	<br>
 
     <h3>Tambah Mobil</h3>
     <form th:action="@{/car/add/} + ${dealer.id}" th:object="${dealer}" method="POST">
@@ -44,7 +46,7 @@
                         <input type="number" th:field="*{listCar[__${iterationStatus.index}__].amount}">
                     </td>
                     <td>
-                        <button type="submit" name="removeRow" th:value="${iterationStatus.index}" class="btn btn-primary">Hapus</button>
+                        <button type="submit" name="removeRow" th:value="${iterationStatus.index}" class="btn btn-danger">Hapus</button>
                     </td>
                 </tr>
             </tbody>

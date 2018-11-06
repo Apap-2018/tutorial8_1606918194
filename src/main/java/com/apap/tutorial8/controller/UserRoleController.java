@@ -40,7 +40,7 @@ public class UserRoleController {
 		}
 		
 		else {
-			message = "Password tidak mengandung angka, huruf, dan minimal 8 karakter";
+			message = "Password Anda tidak mengandung huruf atau angka atau kurang dari 8 karakter";
 		}
    
 		ModelAndView modelAndView = new ModelAndView("redirect:/");
@@ -54,15 +54,15 @@ public class UserRoleController {
 	}
 	
 	@RequestMapping(value="/passwordSubmit",method=RequestMethod.POST)
-	public ModelAndView updatePasswordSubmit(@ModelAttribute PasswordModel pass, Model model, RedirectAttributes redir) {
+	public ModelAndView updatePasswordSubmit(@ModelAttribute PasswordModel pass, Model model, RedirectAttributes redirect) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		UserRoleModel user = userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		String message = "";
-		String pattern = "(?=.*[0-9])(?=.*[a-zA-Z]).{8,}";
+		//String pattern = "(?=.*[0-9])(?=.*[a-zA-Z]).{8,}";
 		
 		if (pass.getConPassword().equals(pass.getNewPassword())) {
 			if (passwordEncoder.matches(pass.getOldPassword(), user.getPassword())) {
-				if (pass.getNewPassword().matches(pattern)) {
+				if (this.validatePassword(pass.getNewPassword())) {
 					userService.changePassword(user, pass.getNewPassword());
 					message = "Password Anda berhasil diubah";
 				}
@@ -79,12 +79,12 @@ public class UserRoleController {
 		}
 		
 		else {
-			message = "Password Baru Tidak Sesuai";
+			message = "Password baru tidak sesuai";
 		}
 		
 		
 		ModelAndView modelAndView = new ModelAndView("redirect:/user/updatePassword");
-		redir.addFlashAttribute("msg", message);
+		redirect.addFlashAttribute("msg", message);
 		return modelAndView;
 	}
 }
